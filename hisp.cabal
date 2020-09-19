@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 681815b6c2d4a3c29d346d41073f0599d3e5fcedbeee8f06879a7d53801a61a1
+-- hash: 71fce92191febb963372e014c7df7200c186a8a4bf80810917340df0734e3ffb
 
 name:           hisp
 version:        0.1.0.0
@@ -27,6 +27,10 @@ source-repository head
 
 library
   exposed-modules:
+      Env
+      Error
+      Expr
+      Lexer
       Lib
   other-modules:
       Paths_hisp
@@ -34,6 +38,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , containers
   default-language: Haskell2010
 
 executable hisp-exe
@@ -58,5 +63,7 @@ test-suite hisp-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , hspec
+    , QuickCheck
     , hisp
   default-language: Haskell2010
