@@ -1,6 +1,8 @@
 module Main where
 
-import Lib
-
 main :: IO ()
-main = putStrLn "hello world"
+main = do let a = "ola" in
+            case a of 
+              "ca"  -> putStrLn "ca"
+              "ola" -> putStrLn "ola"
+              _     -> putStrLn "_"

@@ -1,8 +1,12 @@
 module Lexer where
 
-  replace :: Char -> String -> String -> String
-  replace pat sub = foldr (\c s -> if c == pat then sub ++ s else c:s) ""
+replace :: Eq a => [a] -> [a] -> [a] -> [a]
+replace _ _ [] = []
+replace pat sub str =
+    if take len str == pat
+    then sub ++ replace pat sub (drop len str)
+    else head str : replace pat sub (tail str)
+  where len = length pat
 
-  tokenize :: String -> [String]
-  tokenize = words . replace '(' " ( " . replace ')' " ) "
-
+tokenize :: String -> [String]
+tokenize = words . replace "(" " ( " . replace ")" " ) "
