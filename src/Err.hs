@@ -5,4 +5,4 @@ module Err (
 newtype Err = Err { reason::String }
 
 instance Show Err where
-  show e = "Erorr: " ++ reason e
+  show e = "Error: " ++ reason e

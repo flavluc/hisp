@@ -1,8 +1,7 @@
 module Main where
 
+import Repl (repl)
+import Env (defaultEnv)
+
 main :: IO ()
-main = do let a = "ola" in
-            case a of 
-              "ca"  -> putStrLn "ca"
-              "ola" -> putStrLn "ola"
-              _     -> putStrLn "_"
+main = repl defaultEnv

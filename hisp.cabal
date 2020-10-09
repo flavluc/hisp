@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3fc58235756684f1187cbecb44be1f37aafdad2915e4fe1ce8e5f81b78780b91
+-- hash: 1d2557216d8f8d6729d021ec32bd78dc5c4f7a5b3374d152afa815ac36b104a9
 
 name:           hisp
 version:        0.1.0.0
@@ -32,8 +32,8 @@ library
       Eval
       Expr
       Lexer
-      Lib
       Parser
+      Repl
   other-modules:
       Paths_hisp
   hs-source-dirs:
