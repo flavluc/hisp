@@ -1,6 +1,8 @@
 module Expr where
+
+import Err (Err(..))
   
 data Expr = Symbol String
           | Number Float
           | List [Expr]
-          deriving (Show, Eq, Ord)
+          | Func ([Expr] -> Either Err Expr)
