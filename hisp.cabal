@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1d2557216d8f8d6729d021ec32bd78dc5c4f7a5b3374d152afa815ac36b104a9
+-- hash: 6a67f7b27cc59d30be5b4a332f7f01cc7032d349a5246c782c6522e85f26ea08
 
 name:           hisp
 version:        0.1.0.0
@@ -60,6 +60,7 @@ test-suite hisp-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      EvalSpec
       LexerSpec
       ParserSpec
       Paths_hisp

@@ -5,6 +5,14 @@ import qualified Data.Map as Map
 import Expr
 import Env
 import Err
+import Parser
+import Lexer
+
+evalStr :: String -> Env -> Either Err Expr
+evalStr str env = do
+  (expr, _) <- parse (tokenize str)
+  eExpr <- eval env expr
+  Right eExpr
 
 eval :: Env -> Expr -> Either Err Expr
 eval env (Expr.Symbol s) = case Map.lookup s (table env) of
@@ -12,6 +20,8 @@ eval env (Expr.Symbol s) = case Map.lookup s (table env) of
   Nothing -> Left Err {reason = "unexpected symbol k={" ++ s ++ "}"}
 
 eval env (Expr.Number n) = Right (Expr.Number n)
+
+eval env (Expr.Bool b) = Right (Expr.Bool b)
 
 eval env (Expr.List []) = Left Err {reason = "expected a non-empty list"}
 eval env (Expr.List (fn:args)) = do

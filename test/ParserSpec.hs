@@ -19,6 +19,8 @@ spec = do
     it "should parse different atoms" $ do
       parseAtom "0" `shouldBe` Expr.Number 0
       parseAtom "+" `shouldBe` Expr.Symbol "+"
+      parseAtom "true" `shouldBe` Expr.Bool True
+      parseAtom "false" `shouldBe` Expr.Bool False
 
   describe "parse" $ do
     it "should parse different expressions" $ do

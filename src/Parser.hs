@@ -19,6 +19,8 @@ readSeq (token:rest) exprs = case token of
   _   -> parse (token:rest) >>= \(expr, tokens) -> readSeq tokens (exprs ++ [expr])
 
 parseAtom :: String -> Expr
+parseAtom "true" = Expr.Bool True
+parseAtom "false" = Expr.Bool False
 parseAtom atom = case readMaybe atom of
   Just num -> Expr.Number num
   Nothing -> Expr.Symbol atom

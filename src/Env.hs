@@ -13,7 +13,12 @@ defaultEnv :: Env
 defaultEnv = Env {
   table = Map.fromList [
     ("+", Expr.Func sumArgs),
-    ("-", Expr.Func subArgs)
+    ("-", Expr.Func subArgs),
+    ("=", Expr.Func $ ensureTonicity (==)),
+    ("<", Expr.Func $ ensureTonicity (<)),
+    (">", Expr.Func $ ensureTonicity (>)),
+    ("<=", Expr.Func $ ensureTonicity (<=)),
+    (">=", Expr.Func $ ensureTonicity (>=))
   ]
 }
 
@@ -30,3 +35,15 @@ evalListOfFloats = sequence . (map evalSingleFloat)
 evalSingleFloat :: Expr -> Either Err Float
 evalSingleFloat (Expr.Number num) = Right num
 evalSingleFloat _ = Left Err {reason = "expected a number"}
+
+isSortedBy :: (a -> a -> Bool) -> [a] -> Bool
+isSortedBy lte = loop
+  where
+    loop [] = True
+    loop [_] = True
+    loop (x:y:zs) = (x `lte` y) && loop (y:zs)
+
+ensureTonicity :: (Float -> Float -> Bool) -> ([Expr] -> Either Err Expr)
+ensureTonicity fn = \args -> case args of
+  (first:rest) -> evalListOfFloats (first:rest) >>= \eArgs -> Right (Expr.Bool (isSortedBy fn eArgs))
+  [] -> Left Err {reason = "expected at least one number"}
