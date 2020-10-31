@@ -9,10 +9,6 @@ import Eval (evalStr)
 import Parser (parse)
 import Lexer (tokenize)
 
-printEither :: (Show a, Show b) => Either a b -> IO ()
-printEither (Left a) = print a
-printEither (Right b) = print b
-
 repl :: Env -> IO ()
 repl env = do
   putStrLn "hisp > "
@@ -20,4 +16,6 @@ repl env = do
   input <- getLine
   case input of
     "exit" -> return ()
-    _ -> printEither (evalStr input env) >> repl env
+    _ -> case evalStr env input of
+      (Left err) -> print err >> repl env
+      (Right (env, expr)) -> print expr >> repl env

@@ -7,17 +7,22 @@ import Control.Exception (evaluate)
 import Eval
 import Env
 import Expr
+import Err
+
+eval' :: String -> Either Err Expr
+eval' = fmap snd . evalStr defaultEnv
 
 spec :: Spec
 spec = do
   describe "eval" $ do
     it "should evaluate different expressions" $ do
-      evalStr "0" defaultEnv `shouldBe` Right (Expr.Number 0)
-      evalStr "(< 0 1)" defaultEnv `shouldBe` Right (Expr.Bool True)
-      evalStr "(<= 0 1)" defaultEnv `shouldBe` Right (Expr.Bool True)
-      evalStr "(> 1 0)" defaultEnv `shouldBe` Right (Expr.Bool True)
-      evalStr "(>= 1 0)" defaultEnv `shouldBe` Right (Expr.Bool True)
-      evalStr "(= 0 0 0 0)" defaultEnv `shouldBe` Right (Expr.Bool True)
-      evalStr "(= 0 0 1 0)" defaultEnv `shouldBe` Right (Expr.Bool False)
-      evalStr "(if (< 0 1) 1 2)" defaultEnv `shouldBe` Right (Expr.Number 1)
-      evalStr "(if (> 0 1) 1 2)" defaultEnv `shouldBe` Right (Expr.Number 2)
+      eval' "0" `shouldBe` Right (Expr.Number 0)
+      eval' "(< 0 1)" `shouldBe` Right (Expr.Bool True)
+      eval' "(<= 0 1)" `shouldBe` Right (Expr.Bool True)
+      eval' "(> 1 0)" `shouldBe` Right (Expr.Bool True)
+      eval' "(>= 1 0)" `shouldBe` Right (Expr.Bool True)
+      eval' "(= 0 0 0 0)" `shouldBe` Right (Expr.Bool True)
+      eval' "(= 0 0 1 0)" `shouldBe` Right (Expr.Bool False)
+      eval' "(if (< 0 1) 1 2)" `shouldBe` Right (Expr.Number 1)
+      eval' "(if (> 0 1) 1 2)" `shouldBe` Right (Expr.Number 2)
+      (\(env, _) -> lookup' "a" env) <$> evalStr defaultEnv "(def a 1)" `shouldBe` Right(Just(Expr.Number 1))

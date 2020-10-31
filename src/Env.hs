@@ -7,7 +7,7 @@ import Err (Err(..))
 
 data Env = Env {
   table :: Map.Map String Expr
-}
+} deriving (Show)
 
 defaultEnv :: Env
 defaultEnv = Env {
@@ -21,6 +21,12 @@ defaultEnv = Env {
     (">=", Expr.Func $ ensureTonicity (>=))
   ]
 }
+
+insert :: String -> Expr -> Env -> Env
+insert k v env = Env {table = Map.insert k v (table env)}
+
+lookup' :: String -> Env -> Maybe Expr
+lookup' k env = Map.lookup k (table env)
 
 sumArgs :: [Expr] -> Either Err Expr
 sumArgs args = evalListOfFloats args >>= \pArgs -> Right (Expr.Number (sum pArgs))
