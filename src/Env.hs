@@ -4,7 +4,7 @@ import qualified Data.Map as Map
 
 import Expr (Expr(..))
 import Err (Err(..))
-  
+
 data Env = Env {
   table :: Map.Map String Expr
 }

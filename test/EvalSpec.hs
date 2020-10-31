@@ -19,3 +19,5 @@ spec = do
       evalStr "(>= 1 0)" defaultEnv `shouldBe` Right (Expr.Bool True)
       evalStr "(= 0 0 0 0)" defaultEnv `shouldBe` Right (Expr.Bool True)
       evalStr "(= 0 0 1 0)" defaultEnv `shouldBe` Right (Expr.Bool False)
+      evalStr "(if (< 0 1) 1 2)" defaultEnv `shouldBe` Right (Expr.Number 1)
+      evalStr "(if (> 0 1) 1 2)" defaultEnv `shouldBe` Right (Expr.Number 2)
