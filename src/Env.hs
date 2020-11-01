@@ -6,7 +6,8 @@ import Expr (Expr(..))
 import Err (Err(..))
 
 data Env = Env {
-  table :: Map.Map String Expr
+  table :: Map.Map String Expr,
+  outer :: Maybe Env
 } deriving (Show)
 
 defaultEnv :: Env
@@ -19,14 +20,20 @@ defaultEnv = Env {
     (">", Expr.Func $ ensureTonicity (>)),
     ("<=", Expr.Func $ ensureTonicity (<=)),
     (">=", Expr.Func $ ensureTonicity (>=))
-  ]
+  ],
+  outer = Nothing
 }
 
 insert :: String -> Expr -> Env -> Env
-insert k v env = Env {table = Map.insert k v (table env)}
+insert k v env = Env {table = Map.insert k v (table env), outer=outer env}
 
 lookup' :: String -> Env -> Maybe Expr
-lookup' k env = Map.lookup k (table env)
+lookup' k env = case Map.lookup k (table env) of
+  Just val -> Just val
+  Nothing -> outer env >>= lookup' k
+
+fromList :: Env -> [String] -> [Expr] -> Env
+fromList env ks es = Env {table=Map.fromList (zip ks es), outer=Just env}
 
 sumArgs :: [Expr] -> Either Err Expr
 sumArgs args = evalListOfFloats args >>= \pArgs -> Right (Expr.Number (sum pArgs))

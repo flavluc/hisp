@@ -26,3 +26,4 @@ spec = do
       eval' "(if (< 0 1) 1 2)" `shouldBe` Right (Expr.Number 1)
       eval' "(if (> 0 1) 1 2)" `shouldBe` Right (Expr.Number 2)
       (\(env, _) -> lookup' "a" env) <$> evalStr defaultEnv "(def a 1)" `shouldBe` Right(Just(Expr.Number 1))
+      eval' "((fn (a) (+ 1 a)) 2)" `shouldBe` Right (Expr.Number 3)

@@ -8,14 +8,21 @@ data Expr = Symbol String
           | Number Float
           | Bool Bool
           | List [Expr]
+          | Lambda LambdaExpr
           | Func ([Expr] -> Either Err Expr)
+
+data LambdaExpr = LambdaExpr {
+  params :: Expr,
+  body :: Expr
+}
 
 instance Show Expr where
   show (Symbol s) = s
   show (Number n) = show n
   show (Bool b) = show b
   show (List l) = "(" ++ intercalate "," (map show l) ++ ")"
-  show (Func f) = "Function {}"
+  show (Lambda _) = "Lambda {}"
+  show (Func _) = "Function {}"
 
 instance Eq Expr where
   (Symbol s1) == (Symbol s2) = s1 == s2
