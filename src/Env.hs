@@ -36,11 +36,11 @@ fromList :: Env -> [String] -> [Expr] -> Env
 fromList env ks es = Env {table=Map.fromList (zip ks es), outer=Just env}
 
 sumArgs :: [Expr] -> Either Err Expr
-sumArgs args = evalListOfFloats args >>= \pArgs -> Right (Expr.Number (sum pArgs))
+sumArgs args = Expr.Number . sum <$> evalListOfFloats args
 
 subArgs :: [Expr] -> Either Err Expr
 subArgs [] = Left Err {reason = "expected at least one number"}
-subArgs (first:args) = evalListOfFloats (first:args) >>= \(pFirst:pArgs) -> Right (Expr.Number (pFirst - sum pArgs))
+subArgs (first:args) = (\(pFirst:pArgs) -> Expr.Number (pFirst - sum pArgs)) <$> evalListOfFloats (first:args)
 
 evalListOfFloats :: [Expr] -> Either Err [Float]
 evalListOfFloats = sequence . (map evalSingleFloat)
@@ -58,5 +58,5 @@ isSortedBy lte = loop
 
 ensureTonicity :: (Float -> Float -> Bool) -> ([Expr] -> Either Err Expr)
 ensureTonicity fn = \args -> case args of
-  (first:rest) -> evalListOfFloats (first:rest) >>= \eArgs -> Right (Expr.Bool (isSortedBy fn eArgs))
+  (first:rest) -> Expr.Bool . isSortedBy fn <$> evalListOfFloats (first:rest)
   [] -> Left Err {reason = "expected at least one number"}
